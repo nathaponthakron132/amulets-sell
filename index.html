@@ -42,56 +42,49 @@
         }
         .amulet-item {
             background: #ffffff;
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 1.5rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             transition: transform 0.5s ease, box-shadow 0.5s ease;
-            text-align: left;
         }
         .amulet-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
         }
-        .image-container {
+        .amulet-images {
+            width: 100%;
             display: flex;
-            overflow-x: auto;
-            gap: 1rem;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            scrollbar-width: thin;
-            scrollbar-color: #f59e0b #e5e7eb;
         }
-        .image-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        .image-container::-webkit-scrollbar-thumb {
-            background: #f59e0b;
-            border-radius: 4px;
-        }
-        .image-container::-webkit-scrollbar-track {
-            background: #e5e7eb;
-        }
-        .item-img {
-            width: 145px;
-            height: 220px;
+        .amulet-images img {
+            max-width: 130px;
+            height: 180px;
             object-fit: cover;
+            border: 3px solid #DAA520;
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(218, 165, 32, 0.3);
             cursor: pointer;
-            flex-shrink: 0;
-            border: 2px solid #e5e7eb;
-            transition: transform 0.5s ease, border-color 0.5s ease;
+            transition: transform 0.3s ease;
         }
-        .item-img:hover {
+        .amulet-images img:hover {
             transform: scale(1.1);
-            border-color: #f59e0b;
         }
-        .amulet-item h5 {
+        .amulet-details {
+            text-align: left;
+            width: 100%;
+        }
+        .amulet-details h5 {
             font-size: 0.95rem;
             font-weight: 600;
             color: #1e3a8a;
             margin-bottom: 0.5rem;
         }
-        .amulet-item p {
+        .amulet-details p {
             font-size: 0.95rem;
             color: #4b5563;
             margin: 0.25rem 0;
@@ -124,29 +117,27 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            justify-content: center;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
         }
         .modal-content {
-            max-width: 85%;
+            margin: 5% auto;
+            display: block;
+            max-width: 90%;
             max-height: 80vh;
-            border-radius: 12px;
-            border: 3px solid #f59e0b;
-            object-fit: contain;
-            transition: transform 0.5s ease;
+            border: 3px solid #DAA520;
+            border-radius: 10px;
         }
         .close {
             position: absolute;
-            top: 1.5rem;
-            right: 2.5rem;
+            top: 15px;
+            right: 35px;
             color: #fff;
-            font-size: 2.5rem;
+            font-size: 40px;
             cursor: pointer;
-            transition: color 0.5s ease;
+            transition: color 0.3s ease;
         }
         .close:hover {
-            color: #f59e0b;
+            color: #DAA520;
         }
         .error-message {
             text-align: center;
@@ -169,7 +160,7 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
-        .pagination button:hover {
+        .pagination button:hover:not(:disabled) {
             background: #3b82f6;
         }
         .pagination button:disabled {
@@ -180,40 +171,64 @@
             .amulet-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
-            .item-img {
-                width: 120px;
-                height: 120px;
+            .amulet-images img {
+                max-width: 130px;
+                height: 130px;
             }
-            .amulet-item h5 {
+            .amulet-details h5 {
                 font-size: 0.9rem;
             }
-            .amulet-item p {
+            .amulet-details p {
                 font-size: 0.9rem;
             }
             .section-title {
                 font-size: 1.5rem;
             }
+            .modal-content {
+                max-width: 95%;
+                max-height: 75vh;
+            }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             .amulet-grid {
                 grid-template-columns: 1fr;
             }
-            .item-img {
-                width: 100px;
-                height: 100px;
+            .amulet-images img {
+                max-width: 120px;
+                height: 120px;
             }
-            .amulet-item h5 {
+            .amulet-details h5 {
                 font-size: 0.85rem;
             }
-            .amulet-item p {
+            .amulet-details p {
                 font-size: 0.85rem;
             }
             .section-title {
                 font-size: 1.25rem;
             }
             .modal-content {
-                max-width: 95%;
-                max-height: 75vh;
+                max-width: 90%;
+                max-height: 70vh;
+            }
+            .close {
+                font-size: 35px;
+                right: 25px;
+                top: 15px;
+            }
+        }
+        @media (max-width: 400px) {
+            .amulet-images img {
+                max-width: 100px;
+                height: 100px;
+            }
+            .modal-content {
+                max-width: 90%;
+                max-height: 65vh;
+            }
+            .close {
+                font-size: 30px;
+                right: 20px;
+                top: 10px;
             }
         }
     </style>
@@ -281,7 +296,7 @@
 
                 canvas.width = width;
                 canvas.height = height;
-                ctx.drawImage(img, 0, 0, width, height);
+                ctx.drawImage(img, 0, 0, width, height); // แก้ไขจาก widthítás เป็น width, height
                 callback(canvas.toDataURL("image/jpeg"));
             };
             img.onerror = () => {
@@ -325,20 +340,18 @@
                 resizeImage(localImage1, (resizedImage1) => {
                     resizeImage(localImage2, (resizedImage2) => {
                         item.innerHTML = `
-                            <div class="image-container">
-                                <div>
-                                    <img src="${resizedImage1}" alt="พระเครื่อง" class="item-img" onclick="openModal('${resizedImage1}')">
-                                </div>
-                                <div>
-                                    <img src="${resizedImage2}" alt="พระเครื่อง" class="item-img" onclick="openModal('${resizedImage2}')">
-                                </div>
+                            <div class="amulet-images">
+                                <img src="${resizedImage1}" alt="พระเครื่อง" onclick="openModal('${resizedImage1}')">
+                                <img src="${resizedImage2}" alt="พระเครื่อง" onclick="openModal('${resizedImage2}')">
                             </div>
-                            <h5>${monkTemple?.trim() || 'ไม่ระบุชื่อหลวงพ่อ/วัด'}</h5>
-                            <p><strong>รายละเอียด..</strong> ${year?.trim() || 'ไม่ระบุ'}</p>
-                            <p><strong>ราคาขาย..</strong> ${price?.trim() || '0'} บาท</p>
-                            <p><strong>ค่าจัดส่ง..</strong> ${shipping?.trim() || '0'} บาท</p>
-                            <p><strong>ชื่อแชท Messenger ผู้ขาย..</strong> ${sellerId?.trim() || 'ไม่ระบุ'}</p>
-                            <p><strong>เบอร์ติดต่อ..</strong> ${phone?.trim() || 'ไม่ระบุ'}</p>
+                            <div class="amulet-details">
+                                <h5>${monkTemple?.trim() || 'ไม่ระบุชื่อหลวงพ่อ/วัด'}</h5>
+                                <p><strong>รายละเอียด..</strong> ${year?.trim() || 'ไม่ระบุ'}</p>
+                                <p><strong>ราคาขาย..</strong> ${price?.trim() || '0'} บาท</p>
+                                <p><strong>ค่าจัดส่ง..</strong> ${shipping?.trim() || '0'} บาท</p>
+                                <p><strong>ชื่อแชท Messenger ผู้ขาย..</strong> ${sellerId?.trim() || 'ไม่ระบุ'}</p>
+                                <p><strong>เบอร์ติดต่อ..</strong> ${phone?.trim() || 'ไม่ระบุ'}</p>
+                            </div>
                         `;
                         grid.appendChild(item);
                     });
@@ -419,7 +432,7 @@
         function openModal(imageSrc) {
             const modal = document.getElementById("imageModal");
             const modalImg = document.getElementById("modalImage");
-            modal.style.display = "flex";
+            modal.style.display = "block";
             modalImg.src = imageSrc;
         }
 
