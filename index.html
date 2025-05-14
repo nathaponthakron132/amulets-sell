@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ขายพระเครื่อง</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            color: #1f2937;
+        }
+        ::selection {
+            background-color: #f59e0b;
+            color: #fff;
+        }
+        .navbar {
+            background: linear-gradient(to right, #1e3a8a, #3b82f6);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            color: #1e3a8a;
+            font-weight: 700;
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 1.75rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .amulet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+        .amulet-item {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            text-align: left;
+        }
+        .amulet-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+        .image-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: #f59e0b #e5e7eb;
+        }
+        .image-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .image-container::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 4px;
+        }
+        .image-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        .item-img {
+            width: 145px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            flex-shrink: 0;
+            border: 2px solid #e5e7eb;
+            transition: transform 0.5s ease, border-color 0.5s ease;
+        }
+        .item-img:hover {
+            transform: scale(1.1);
+            border-color: #f59e0b;
+        }
+        .amulet-item h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+        .amulet-item p {
+            font-size: 0.95rem;
+            color: #4b5563;
+            margin: 0.25rem 0;
+            line-height: 1.5;
+        }
+        .motivational-text {
+            background: #fefce8;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem auto;
+            text-align: center;
+            font-style: italic;
+            color: #713f12;
+            font-size: 1.1rem;
+            max-width: 800px;
+        }
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 4px solid #f59e0b;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            max-width: 85%;
+            max-height: 80vh;
+            border-radius: 12px;
+            border: 3px solid #f59e0b;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+        .close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2.5rem;
+            color: #fff;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.5s ease;
+        }
+        .close:hover {
+            color: #f59e0b;
+        }
+        .error-message {
+            text-align: center;
+            color: #ff0000;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+        .pagination button {
+            background: #1e3a8a;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .pagination button:hover {
+            background: #3b82f6;
+        }
+        .pagination button:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+        @media (max-width: 768px) {
+            .amulet-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            .item-img {
+                width: 120px;
+                height: 120px;
+            }
+            .amulet-item h5 {
+                font-size: 0.9rem;
+            }
+            .amulet-item p {
+                font-size: 0.9rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .amulet-grid {
+                grid-template-columns: 1fr;
+            }
+            .item-img {
+                width: 100px;
+                height: 100px;
+            }
+            .amulet-item h5 {
+                font-size: 0.85rem;
+            }
+            .amulet-item p {
+                font-size: 0.85rem;
+            }
+            .section-title {
+                font-size: 1.25rem;
+            }
+            .modal-content {
+                max-width: 95%;
+                max-height: 75vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar">
+        <div class="container mx-auto flex justify-between items-center">
+            <a class="text-white text-lg md:text-xl font-semibold" href="https://nathaponthakron132.github.io/Load-sell-new/">ไปหน้าอัพโหลดรูปภาพและข้อมูลสินค้าใหม่ และ กฏระเบียบ</a>
+            <a class="text-white text-lg md:text-xl font-bold" href="#">© 2025 พระเครื่องเมืองสยาม. สงวนลิขสิทธิ์.</a> 
+        </div>
+    </nav>
+
+    <!-- ส่วนประมูลพระเครื่อง -->
+    <div class="container mx-auto px-4 py-8" id="auction">
+        <h2 class="section-title">รายละเอียดตลาด สินค้าใหม่ ทั่วไป</h2>
+        <div class="motivational-text">
+            "ขยายภาพใหญ่คลิกรูปภาพ"
+        </div>
+        <div class="amulet-grid" id="amulet-grid"></div>
+        <div id="error-message" class="error-message"></div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Modal สำหรับขยายรูปภาพ -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">×</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="text-sm">© 2025 พระเครื่องเมืองสยาม. สงวนลิขสิทธิ์.</p>
+    </footer>
+
+    <script>
+        // ลิงก์ CSV สำหรับหน้าเว็บ
+        const csvUrls = {
+            page1: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQP515i591GK4-S8r9cVcQmgOag3ca6V-7zJpufsesJ0KA7TpFpyhOVF_ICp4cVd6iMixIvl1wpVmRA/pub?gid=681567231&single=true&output=csv",
+            page2: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQP515i591GK4-S8r9cVcQmgOag3ca6V-7zJpufsesJ0KA7TpFpyhOVF_ICp4cVd6iMixIvl1wpVmRA/pub?gid=681567231&single=true&output=csv",
+            page3: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQP515i591GK4-S8r9cVcQmgOag3ca6V-7zJpufsesJ0KA7TpFpyhOVF_ICp4cVd6iMixIvl1wpVmRA/pub?gid=681567231&single=true&output=csv",
+            page4: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQP515i591GK4-S8r9cVcQmgOag3ca6V-7zJpufsesJ0KA7TpFpyhOVF_ICp4cVd6iMixIvl1wpVmRA/pub?gid=681567231&single=true&output=csv"
+        };
+
+        // กำหนดจำนวนรายการต่อหน้าและจำนวนสูงสุด
+        const itemsPerPage = 10;
+        const maxItems = 100;
+        let currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+        let allItems = [];
+
+        // ฟังก์ชันปรับขนาดรูปภาพ
+        function resizeImage(src, callback) {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                let { width, height } = img;
+                const maxWidth = 500;
+
+                if (width > maxWidth) {
+                    height = (maxWidth / width) * height;
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                callback(canvas.toDataURL("image/jpeg"));
+            };
+            img.onerror = () => {
+                console.error(`Failed to load image: ${src}`);
+                callback('images/default-image.jpg');
+            };
+            img.src = src;
+        }
+
+        // ดึงข้อมูลจาก URL ปัจจุบันเพื่อเลือก CSV
+        const csvUrl = csvUrls[`page${currentPage}`] || csvUrls.page1;
+
+        // ฟังก์ชันแสดงรายการในหน้าปัจจุบัน
+        function displayItems(pageItems) {
+            const grid = document.getElementById("amulet-grid");
+            grid.innerHTML = '';
+            const errorMessage = document.getElementById("error-message");
+
+            if (pageItems.length === 0) {
+                errorMessage.textContent = "ไม่มีข้อมูลในหน้านี้";
+                return;
+            }
+
+            pageItems.forEach((cols, index) => {
+                const [sellerId, monkTemple, material, year, phone, price, shipping] = cols;
+                
+                // ตรวจสอบว่ามีข้อมูลในคอลัมน์หรือไม่
+                if (!sellerId && !monkTemple && !material && !year && !phone && !price && !shipping) {
+                    return;
+                }
+
+                // กำหนดชื่อไฟล์รูปภาพตามลำดับ
+                const localImage1 = `images/item${(currentPage - 1) * itemsPerPage + index + 1}_image1.jpg`;
+                const localImage2 = `images/item${(currentPage - 1) * itemsPerPage + index + 1}_image2.jpg`;
+
+                // สร้าง element สำหรับรายการ
+                const item = document.createElement("div");
+                item.className = "amulet-item";
+
+                // ปรับขนาดรูปภาพก่อนแสดง
+                resizeImage(localImage1, (resizedImage1) => {
+                    resizeImage(localImage2, (resizedImage2) => {
+                        item.innerHTML = `
+                            <div class="image-container">
+                                <div>
+                                    <img src="${resizedImage1}" alt="พระเครื่อง" class="item-img" onclick="openModal('${resizedImage1}')">
+                                </div>
+                                <div>
+                                    <img src="${resizedImage2}" alt="พระเครื่อง" class="item-img" onclick="openModal('${resizedImage2}')">
+                                </div>
+                            </div>
+                            <h5>${monkTemple?.trim() || 'ไม่ระบุชื่อหลวงพ่อ/วัด'}</h5>
+                            <p><strong>รายละเอียด..</strong> ${year?.trim() || 'ไม่ระบุ'}</p>
+                            <p><strong>ราคาขาย..</strong> ${price?.trim() || '0'} บาท</p>
+                            <p><strong>ค่าจัดส่ง..</strong> ${shipping?.trim() || '0'} บาท</p>
+                            <p><strong>ชื่อแชท Messenger ผู้ขาย..</strong> ${sellerId?.trim() || 'ไม่ระบุ'}</p>
+                            <p><strong>เบอร์ติดต่อ..</strong> ${phone?.trim() || 'ไม่ระบุ'}</p>
+                        `;
+                        grid.appendChild(item);
+                    });
+                });
+            });
+        }
+
+        // ฟังก์ชันสร้างปุ่มแบ่งหน้า
+        function setupPagination(totalItems) {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = '';
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            // ปุ่ม Previous
+            const prevButton = document.createElement("button");
+            prevButton.textContent = "ก่อนหน้า";
+            prevButton.disabled = currentPage === 1;
+            prevButton.onclick = () => changePage(currentPage - 1);
+            pagination.appendChild(prevButton);
+
+            // ปุ่มตัวเลขหน้า
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.textContent = i;
+                pageButton.disabled = i === currentPage;
+                pageButton.onclick = () => changePage(i);
+                pagination.appendChild(pageButton);
+            }
+
+            // ปุ่ม Next
+            const nextButton = document.createElement("button");
+            nextButton.textContent = "ถัดไป";
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.onclick = () => changePage(currentPage + 1);
+            pagination.appendChild(nextButton);
+        }
+
+        // ฟังก์ชันเปลี่ยนหน้า
+        function changePage(page) {
+            currentPage = page;
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = allItems.slice(start, end);
+            displayItems(pageItems);
+            setupPagination(allItems.length);
+            window.history.pushState({}, '', `?page=${currentPage}`);
+        }
+
+        // ดึงข้อมูล CSV
+        fetch(csvUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const rows = data.split("\n").slice(1).filter(row => row.trim());
+                allItems = rows.slice(0, maxItems).map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+                
+                if (allItems.length === 0) {
+                    document.getElementById("error-message").textContent = "ไม่มีข้อมูลใน Google Sheets กรุณาเพิ่มข้อมูลในแถว";
+                    return;
+                }
+
+                const start = (currentPage - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+                const pageItems = allItems.slice(start, end);
+                displayItems(pageItems);
+                setupPagination(allItems.length);
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById("error-message").textContent = `ไม่สามารถดึงข้อมูลจาก Google Sheets ได้: ${error.message}`;
+            });
+
+        // ฟังก์ชันเปิด Modal
+        function openModal(imageSrc) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            modal.style.display = "flex";
+            modalImg.src = imageSrc;
+        }
+
+        // ฟังก์ชันปิด Modal
+        function closeModal() {
+            const modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+        }
+
+        // ปิด Modal เมื่อคลิกนอกภาพ
+        window.onclick = function(event) {
+            const modal = document.getElementById("imageModal");
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
